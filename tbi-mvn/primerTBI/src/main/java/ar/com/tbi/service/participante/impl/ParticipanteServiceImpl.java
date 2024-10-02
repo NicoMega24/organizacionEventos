@@ -9,12 +9,13 @@ import ar.com.tbi.service.eventoGastronomico.EventoGastronomicoService;
 import ar.com.tbi.service.participante.ParticipanteService;
 
 public class ParticipanteServiceImpl implements ParticipanteService {
-    private EventoGastronomicoService eventoGastronomicoService;
+    private final EventoGastronomicoService eventoGastronomicoService;
 
     public ParticipanteServiceImpl(EventoGastronomicoService eventoGastronomicoService) {
         this.eventoGastronomicoService = eventoGastronomicoService;
     }
 
+    @Override
     public Participante inscribirParticipante() {
         Participante participanteNuevo = new Participante();
         Scanner sc = new Scanner(System.in);
@@ -47,7 +48,7 @@ public class ParticipanteServiceImpl implements ParticipanteService {
     }
 
     
-
+    @Override
     public Participante buscarParticipantePorDni(Long dni) {
         for (EventoGastronomico evento : eventoGastronomicoService.getEventoGastronomico()) {
             for (Participante participante : evento.getParticipantes().values()) {
@@ -58,7 +59,4 @@ public class ParticipanteServiceImpl implements ParticipanteService {
         }
         return null;
     }
-
-
-    
 }

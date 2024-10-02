@@ -2,17 +2,16 @@ package ar.com.tbi.bd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import ar.com.tbi.domain.EventoGastronomico;
 
 public class BdEventoGastronomico {
 
-    private static List<EventoGastronomico> eventoList = new ArrayList<>();
+    private static final List<EventoGastronomico> eventoList = new ArrayList<>();
 
     public static List<EventoGastronomico> getEventoList() {
 
-//         cursoList.add(new Curso(UUID.randomUUID(), "Programación Orientada a Objetos", 100, ComplejidadEnum.ALTA));
+        // eventoList.add(new EventoGastronomico());
 //         cursoList.add(new Curso(UUID.randomUUID(), "Algoritmos y Estructuras de Datos", 80, ComplejidadEnum.MEDIA));
 //         cursoList.add(new Curso(UUID.randomUUID(), "Desarrollo Web", 120, ComplejidadEnum.MEDIA));
 //         cursoList.add(new Curso(UUID.randomUUID(), "Bases de Datos", 90, ComplejidadEnum.BAJA));

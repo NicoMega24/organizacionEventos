@@ -12,20 +12,26 @@ import ar.com.tbi.bd.BdEventoGastronomico;
 import ar.com.tbi.domain.EventoGastronomico;
 import ar.com.tbi.domain.Participante;
 import ar.com.tbi.service.archivos.ArchivosEventoGastronomicoService;
+import ar.com.tbi.service.chef.ChefService;
 import ar.com.tbi.service.eventoGastronomico.EventoGastronomicoService;
 import ar.com.tbi.service.menu.MenuService;
 import ar.com.tbi.service.participante.ParticipanteService;
+import ar.com.tbi.service.resena.ResenaService;
 
 public class MenuServiceImpl implements MenuService {
 
-    private EventoGastronomicoService eventoService;
-    private ArchivosEventoGastronomicoService archivosEventoGastronomicoService;
-    private ParticipanteService participanteService;
+    private final EventoGastronomicoService eventoService;
+    private final ArchivosEventoGastronomicoService archivosEventoGastronomicoService;
+    private final ParticipanteService participanteService;
+    private final ChefService chefService;
+    private final ResenaService resenaService;
 
-    public MenuServiceImpl(EventoGastronomicoService eventoService, ArchivosEventoGastronomicoService archivosEventoGastronomicoService, ParticipanteService participanteService) {
+    public MenuServiceImpl(EventoGastronomicoService eventoService, ArchivosEventoGastronomicoService archivosEventoGastronomicoService, ParticipanteService participanteService, ChefService chefService, ResenaService resenaService) {
         this.eventoService = eventoService;
         this.archivosEventoGastronomicoService = archivosEventoGastronomicoService;
         this.participanteService = participanteService;
+        this.chefService = chefService;
+        this.resenaService = resenaService;
     }
 
     @Override
@@ -47,13 +53,9 @@ public class MenuServiceImpl implements MenuService {
             opcion = scanner.nextInt();
             scanner.nextLine();
             switch (opcion) {
-                case 1:
-                    eventoService.crearEventoGastronomico();
-                    break;
-                case 2:
-                    participanteService.inscribirParticipante();
-                    break;
-                case 3:
+                case 1 -> eventoService.crearEventoGastronomico();
+                case 2 -> participanteService.inscribirParticipante();
+                case 3 -> {
                     System.out.print("Ingrese el ID del evento gastronómico: ");
                     UUID idEvento = UUID.fromString(scanner.next());
                     System.out.print("Ingrese el DNI del participante: ");
@@ -63,36 +65,26 @@ public class MenuServiceImpl implements MenuService {
                     } catch (NoSuchElementException e) {
                         System.out.println(e.getMessage());
                     }
-                    break;
-                case 4:
+                }
+                case 4 -> chefService.crearChef();
+                case 5 -> {
                     System.out.print("Ingrese el ID del evento gastronómico: ");
-                    UUID idEvento2 = UUID.fromString(scanner.next());
-                    EventoGastronomico eventoGastronomico = eventoService.buscarEventoPorId(idEvento2);
-                    if (eventoGastronomico != null) {
-                        eventoService.crearChef(eventoGastronomico);
-                        System.out.println("Chef creado y agregado a Evento");
+                    String idEventoString = scanner.nextLine();
+                    UUID idEvento1 = UUID.fromString(idEventoString);
+                    
+                    System.out.print("Ingrese el DNI del participante: ");
+                    Long dniNuevo = scanner.nextLong();
+                    
+                    Participante participante = participanteService.buscarParticipantePorDni(dniNuevo);
+                    EventoGastronomico evento = eventoService.buscarEventoPorId(idEvento1);
+                    
+                    if (participante != null && evento != null) {
+                        resenaService.dejarResena(participante, evento);
                     } else {
-                        System.out.println("Evento gastronómico no encontrado");
+                        System.out.println("Participante o evento no encontrado");
                     }
-                    break;
-                case 5:
-                    System.out.print("Ingrese el ID del evento gastronómico: ");
-                    UUID idEvento3 = UUID.fromString(scanner.next());
-                    EventoGastronomico evento = eventoService.buscarEventoPorId(idEvento3);
-                    if (evento != null) {
-                        System.out.print("Ingrese el DNI del participante: ");
-                        Long dniParticipante = scanner.nextLong();
-                        Participante participante = participanteService.buscarParticipantePorDni(dniParticipante);
-                        if (participante != null) {
-                            eventoService.dejarResena(evento, participante);
-                        } else {
-                            System.out.println("Participante no encontrado");
-                        }
-                    } else {
-                        System.out.println("Evento gastronómico no encontrado");
-                    }
-                    break;
-                case 6:
+                }
+                case 6 -> {
                     System.out.print("Ingrese la fecha (dd/MM/yyyy): ");
                     String fechaString = scanner.next();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -104,18 +96,14 @@ public class MenuServiceImpl implements MenuService {
                     } else {
                         System.out.println("Eventos disponibles en " + fechaString + ":");
                         for (EventoGastronomico eventos : eventosDisponibles) {
-                            System.out.println(eventosDisponibles);
+                            System.out.println(eventos);
                         }
                     }
-                    break;
-                case 7:
-                    archivosEventoGastronomicoService.exportarEventoGastronomicoCsv(BdEventoGastronomico.getEventoList());                
-                    break;
-                case 8:
-                    System.out.println("\n ------------ Aplicacion finalizada --------------");
-                    break;
-                default:
-                    break;
+                }
+                case 7 -> archivosEventoGastronomicoService.exportarEventoGastronomicoCsv(BdEventoGastronomico.getEventoList());
+                case 8 -> System.out.println("\n ------------ Aplicacion finalizada --------------");
+                default -> {
+                }
             }
         } while (opcion != 8);
     }

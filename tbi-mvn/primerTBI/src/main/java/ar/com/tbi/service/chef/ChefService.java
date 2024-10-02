@@ -1,7 +1,7 @@
-// package ar.com.tbi.service.chef;
+package ar.com.tbi.service.chef;
 
-// import ar.com.tbi.domain.Chef;
+import ar.com.tbi.domain.Chef;
 
-// public interface ChefService {
-//     Chef crearChef();
-// }
+public interface ChefService {
+    Chef crearChef();
+}

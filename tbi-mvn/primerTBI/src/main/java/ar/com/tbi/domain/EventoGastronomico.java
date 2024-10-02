@@ -1,7 +1,9 @@
 package ar.com.tbi.domain;
 
-import java.util.*;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 
 public class EventoGastronomico {
     private UUID idEvento;
@@ -10,18 +12,18 @@ public class EventoGastronomico {
     private LocalDateTime fechaYHora;
     private String ubicacion;
     private Double capacidadMax;
-    private Chef dniChefAcargo;
+    private Chef nombreChefAcargo;
 
     private Map<Long,Participante> participantes = new TreeMap<>();
 
-    public EventoGastronomico(UUID idEvento, String nombre, String descripcion, LocalDateTime fechaYHora, String ubicacion, Double capacidadMax, Chef dniChefAcargo) {
+    public EventoGastronomico(UUID idEvento, String nombre, String descripcion, LocalDateTime fechaYHora, String ubicacion, Double capacidadMax, Chef nombreChefAcargo) {
         this.idEvento = idEvento;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fechaYHora = fechaYHora;
         this.ubicacion = ubicacion;
         this.capacidadMax = capacidadMax;
-        this.dniChefAcargo = dniChefAcargo;
+        this.nombreChefAcargo = nombreChefAcargo;
 
         this.participantes = new TreeMap<>();
     }
@@ -85,12 +87,12 @@ public class EventoGastronomico {
         this.participantes = participantes;
     }
     
-    public Chef getDniChefAcargo() {
-        return dniChefAcargo;
+    public Chef getNombreChefAcargo() {
+        return nombreChefAcargo;
     }
 
-    public void setDniChefAcargo(Chef dniChefAcargo) {
-        this.dniChefAcargo = dniChefAcargo;
+    public void setNombreChefAcargo(Chef nombreChefAcargo) {
+        this.nombreChefAcargo = nombreChefAcargo;
     }
     
 
@@ -111,7 +113,7 @@ public class EventoGastronomico {
                 .append("Capacidad : ")
                 .append(this.getCapacidadMax()).append("\n")
                 .append("Chef a cargo : ")
-                .append(this.getDniChefAcargo()).append("\n")
+                .append(this.getNombreChefAcargo()).append("\n")
                 .append("-------------------------------------------------------\n")
                 .toString();
 

@@ -11,11 +11,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.UUID;
 
-import ar.com.tbi.domain.Chef;
 import ar.com.tbi.domain.EventoGastronomico;
 import ar.com.tbi.domain.Participante;
-import ar.com.tbi.domain.Resena;
-import ar.com.tbi.enumeration.EspecialidadEnum;
 import ar.com.tbi.service.eventoGastronomico.EventoGastronomicoService;
 import ar.com.tbi.service.organizacion.OrganizacionService;
 import ar.com.tbi.service.participante.ParticipanteService;
@@ -23,15 +20,14 @@ import ar.com.tbi.service.participante.ParticipanteService;
 
 public class EventoGastronomicoServiceImpl implements EventoGastronomicoService {
 
-    private OrganizacionService organizacionService;
-    private List<Resena> resenas = new ArrayList<>();
+    private final OrganizacionService organizacionService;
+    private final List<EventoGastronomico> eventos = new ArrayList<>();
 
     public EventoGastronomicoServiceImpl(ParticipanteService participanteService, OrganizacionService organizacionService) {
         this.organizacionService = organizacionService;
-        this.resenas = new ArrayList<>();
     }
     
-
+    @Override
     public EventoGastronomico crearEventoGastronomico() {
         EventoGastronomico nuevoEventoGastronomico = new EventoGastronomico();
         Scanner sc = new Scanner(System.in);
@@ -120,20 +116,6 @@ public class EventoGastronomicoServiceImpl implements EventoGastronomicoService 
         }
     }
 
-    @Override
-    public void crearChef(EventoGastronomico eventoGastronomico) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Ingrese el DNI del chef:");
-        Long dniChef = sc.nextLong();
-        System.out.println("Ingrese el nombre del chef:");
-        String nombre = sc.next();
-        System.out.println("Ingrese la especialidad del chef (ITALIANA, MEXICANA, VEGANA, VEGETARIANA, ASADO):");
-        String especialidad = sc.next().toUpperCase();
-        EspecialidadEnum especialidadEnum = EspecialidadEnum.valueOf(especialidad);
-        Chef nuevoChef = new Chef(dniChef, nombre, especialidadEnum);
-        nuevoChef.getEventoParticipa().add(eventoGastronomico);
-        System.out.println("Chef registrado y agregado al evento con éxito!");
-    }
     
     @Override
     public EventoGastronomico buscarEventoPorId(UUID idEvento) {
@@ -174,28 +156,9 @@ public class EventoGastronomicoServiceImpl implements EventoGastronomicoService 
         }
     }
 
-    
-    public void dejarResena(EventoGastronomico evento, Participante participante) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Ingrese la calificación del evento (1-5): ");
-        Double calificacion = sc.nextDouble();
-        while (calificacion < 1 || calificacion > 5) {
-            System.out.println("La calificación debe ser entre 1 y 5. Ingrese nuevamente: ");
-            calificacion = sc.nextDouble();
-        }
-        System.out.println("Ingrese el comentario: ");
-        sc.nextLine();
-        String comentario = sc.nextLine();
-        sc.close();
-        Resena resena = new Resena(UUID.randomUUID(), evento, participante, calificacion, new String(comentario));
-        resenas.add(resena);
-        System.out.println("Resena ingresasa con éxito!");
-    }
-    
     @Override
     public List<EventoGastronomico> getEventoGastronomico() {
-        List<EventoGastronomico> listaEventos = new ArrayList<>();
-        return listaEventos;
+        return eventos;
     }
 
 }

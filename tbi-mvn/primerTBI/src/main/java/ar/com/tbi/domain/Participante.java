@@ -1,6 +1,7 @@
 package ar.com.tbi.domain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ar.com.tbi.enumeration.InteresEnum;
 

@@ -19,10 +19,6 @@ public interface EventoGastronomicoService {
     
     void listarParticipantesYEventosConcurridos();
 
-    void crearChef(EventoGastronomico eventoGastronomico);
-    
-    void dejarResena(EventoGastronomico evento, Participante participante);
-
     EventoGastronomico buscarEventoPorId(UUID idEvento);
 
     List<EventoGastronomico> getEventoGastronomico();

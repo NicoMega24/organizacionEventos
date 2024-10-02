@@ -15,23 +15,24 @@ public class ArchivosEventoGastronomicoServiceImpl implements ArchivosEventoGast
     CSVWriter csvWriter;
 
     @Override
-    public void exportarEventoGastronomicoCsv(List<EventoGastronomico> eventoGastronomicos){
+    public void exportarEventoGastronomicoCsv(List<EventoGastronomico> eventoList){
 
         String ruta = System.getProperty("user.dir").concat(UBICACION_ARCHIVO).concat("nuevos-eventoGastronomico.csv");
 
         try{
             this.csvWriter = new CSVWriter(new FileWriter(ruta));
-            String[] encabezado = {"ID","NOMBRE","DESCRIPCION","FECHAYHORA","UBICACION", "CAPACIDADMAX"};
+            String[] encabezado = {"ID","NOMBRE","DESCRIPCION","FECHAYHORA","UBICACION", "CAPACIDADMAX", "CHEFACARGO"};
             this.csvWriter.writeNext(encabezado);
 
-            for (EventoGastronomico eventoGastronomico : eventoGastronomicos) {
+            for (EventoGastronomico eventoGastronomico : eventoList) {
                 String[] datos = {
                     eventoGastronomico.getIdEvento().toString(),
                     eventoGastronomico.getNombre(),
-                    eventoGastronomico.getDescripcion().toString(),
+                    eventoGastronomico.getDescripcion(),
                     eventoGastronomico.getFechaYHora().toString(),
-                    eventoGastronomico.getUbicacion().toString(),
-                    eventoGastronomico.getCapacidadMax().toString()
+                    eventoGastronomico.getUbicacion(),
+                    eventoGastronomico.getCapacidadMax().toString(),
+                    eventoGastronomico.getNombreChefAcargo().toString(),
                 };
                 this.csvWriter.writeNext(datos);
             }
