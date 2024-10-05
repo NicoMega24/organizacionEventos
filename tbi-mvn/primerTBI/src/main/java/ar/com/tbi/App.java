@@ -22,7 +22,6 @@ import ar.com.tbi.service.resena.impl.ResenaServiceImpl;
 
 public class App {
     public static void main(String[] args) {
-        // Inicializar servicios
         Organizacion organizacion = new Organizacion();
         OrganizacionService organizacionService = new OrganizacionServiceImpl(organizacion);
         ParticipanteService participanteService = new ParticipanteServiceImpl(null);
@@ -32,7 +31,6 @@ public class App {
         ChefService chefService = new ChefServiceImpl();
         MenuService menuService = new MenuServiceImpl(eventoGastronomicoService, archivosEventoGastronomicoService, participanteService, chefService, resenaService);
 
-        // Mostrar menú
         try (Scanner scanner = new Scanner(System.in)) {
             menuService.mostrarMenu(scanner);
         } finally {

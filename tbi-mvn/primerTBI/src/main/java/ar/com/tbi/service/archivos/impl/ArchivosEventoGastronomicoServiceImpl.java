@@ -10,7 +10,7 @@ import ar.com.tbi.domain.EventoGastronomico;
 import ar.com.tbi.service.archivos.ArchivosEventoGastronomicoService;
 
 public class ArchivosEventoGastronomicoServiceImpl implements ArchivosEventoGastronomicoService {
-    private final String UBICACION_ARCHIVO = "\\src\\main\\java\\ar\\com\\tbi\\recursos\\";
+    private final String UBICACION_ARCHIVO = "C:\\Users\\Nicolás\\Desktop\\tbi-mvn\\primerTBI\\src\\main\\java\\ar\\com\\tbi\\recursos";
 
     CSVWriter csvWriter;
 
@@ -32,7 +32,7 @@ public class ArchivosEventoGastronomicoServiceImpl implements ArchivosEventoGast
                     eventoGastronomico.getFechaYHora().toString(),
                     eventoGastronomico.getUbicacion(),
                     eventoGastronomico.getCapacidadMax().toString(),
-                    eventoGastronomico.getNombreChefAcargo().toString(),
+                    eventoGastronomico.getChefAcargo().toString(),
                 };
                 this.csvWriter.writeNext(datos);
             }

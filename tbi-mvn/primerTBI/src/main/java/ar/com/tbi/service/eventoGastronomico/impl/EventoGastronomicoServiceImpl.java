@@ -22,8 +22,10 @@ public class EventoGastronomicoServiceImpl implements EventoGastronomicoService 
 
     private final OrganizacionService organizacionService;
     private final List<EventoGastronomico> eventos = new ArrayList<>();
+    private final ParticipanteService participanteService;
 
     public EventoGastronomicoServiceImpl(ParticipanteService participanteService, OrganizacionService organizacionService) {
+        this.participanteService = participanteService;
         this.organizacionService = organizacionService;
     }
     
@@ -86,34 +88,25 @@ public class EventoGastronomicoServiceImpl implements EventoGastronomicoService 
 
     @Override
     public void inscribirParticipanteAEventoGastronomico(UUID idEvento, Long dni) {
-        Participante participante = null;
-        boolean existeElParticipante = Boolean.FALSE;
-        boolean esEventoGastronomicoEncontrado = Boolean.FALSE;
+    Participante participante = participanteService.buscarParticipantePorDni(dni);
+    if (participante == null) {
+        throw new NoSuchElementException("No existe el participante");
+    }
 
-        for (EventoGastronomico evento: organizacionService.getEventoGastronomico()){
-            if (evento.getParticipantes().containsKey(dni)){
-                participante = evento.getParticipantes().get(dni);
-                existeElParticipante = Boolean.TRUE;
-                break;
-            }
-        }
-        if (!existeElParticipante){
-            throw new NoSuchElementException("No existe el participante");
-        }
+    EventoGastronomico evento = buscarEventoPorId(idEvento);
+    if (evento == null) {
+        throw new NoSuchElementException("No existe el evento gastronómico");
+    }
 
-        for (EventoGastronomico evento: organizacionService.getEventoGastronomico()){
-            if (evento.getIdEvento().equals(idEvento)){
-                participante.getEventosConcurridos().add(evento);
-                evento.getParticipantes().put(participante.getDni(), participante);
-                esEventoGastronomicoEncontrado = Boolean.TRUE;
-                break;
-            }
-        }
-        if (!esEventoGastronomicoEncontrado){
-            throw new NoSuchElementException("No existe el evento gastronómico");
-        }else {
-            System.out.println("Participante asignado al evento");
-        }
+    if (evento.getParticipantes().containsKey(dni)) {
+        System.out.println("El participante ya está inscrito en este evento");
+    } else if (evento.getCapacidadMax() <= evento.getParticipantes().size()) {
+        System.out.println("El evento está lleno, no se puede inscribir más participantes");
+    } else {
+        participante.getEventosConcurridos().add(evento);
+        evento.getParticipantes().put(dni, participante);
+        System.out.println("Participante asignado al evento");
+    }
     }
 
     
@@ -129,15 +122,15 @@ public class EventoGastronomicoServiceImpl implements EventoGastronomicoService 
 
     @Override
     public List<EventoGastronomico> listarEventosDisponibles(LocalDateTime fechaYHora) {
-        List<EventoGastronomico> eventosDisponibles = new ArrayList<>();
-        for (EventoGastronomico evento : eventosDisponibles) {
-            if (evento.getFechaYHora().equals(fechaYHora) && 
-                evento.getParticipantes().size() < evento.getCapacidadMax()) {
-                eventosDisponibles.add(evento);
-            }
+    List<EventoGastronomico> eventosDisponibles = new ArrayList<>();
+    for (EventoGastronomico evento : organizacionService.getEventoGastronomico()) {
+        if (evento.getFechaYHora().toLocalDate().equals(fechaYHora.toLocalDate()) 
+            && evento.getParticipantes().size() < evento.getCapacidadMax()) {
+            eventosDisponibles.add(evento);
         }
-        return eventosDisponibles;
     }
+    return eventosDisponibles;
+}
 
     @Override
     public void listarParticipantesYEventosConcurridos() {

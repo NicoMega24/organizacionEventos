@@ -6,6 +6,6 @@ import ar.com.tbi.domain.Resena;
 
 public interface ResenaService {
 
-    Resena dejarResena(Participante participante, EventoGastronomico eventoGastronomico);
+    Resena dejarResena(EventoGastronomico evento, Participante participante);
 
 }

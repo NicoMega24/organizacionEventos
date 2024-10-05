@@ -12,7 +12,7 @@ public class EventoGastronomico {
     private LocalDateTime fechaYHora;
     private String ubicacion;
     private Double capacidadMax;
-    private Chef nombreChefAcargo;
+    private Chef chefAcargo;
 
     private Map<Long,Participante> participantes = new TreeMap<>();
 
@@ -23,7 +23,7 @@ public class EventoGastronomico {
         this.fechaYHora = fechaYHora;
         this.ubicacion = ubicacion;
         this.capacidadMax = capacidadMax;
-        this.nombreChefAcargo = nombreChefAcargo;
+        this.chefAcargo = nombreChefAcargo;
 
         this.participantes = new TreeMap<>();
     }
@@ -87,12 +87,12 @@ public class EventoGastronomico {
         this.participantes = participantes;
     }
     
-    public Chef getNombreChefAcargo() {
-        return nombreChefAcargo;
+    public Chef getChefAcargo() {
+        return chefAcargo;
     }
 
-    public void setNombreChefAcargo(Chef nombreChefAcargo) {
-        this.nombreChefAcargo = nombreChefAcargo;
+    public void setChefAcargo(Chef chefAcargo) {
+        this.chefAcargo = chefAcargo;
     }
     
 
@@ -113,7 +113,7 @@ public class EventoGastronomico {
                 .append("Capacidad : ")
                 .append(this.getCapacidadMax()).append("\n")
                 .append("Chef a cargo : ")
-                .append(this.getNombreChefAcargo()).append("\n")
+                .append(this.getChefAcargo()).append("\n")
                 .append("-------------------------------------------------------\n")
                 .toString();
 

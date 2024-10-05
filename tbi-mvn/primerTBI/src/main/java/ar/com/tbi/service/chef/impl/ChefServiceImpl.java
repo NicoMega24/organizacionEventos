@@ -20,7 +20,7 @@ public class ChefServiceImpl implements ChefService {
         System.out.println("Ingrese el dni del chef: ");
         Long dniChef = sc.nextLong();
         
-        sc.nextLine(); // Consumir el salto de línea
+        sc.nextLine();
         
         System.out.println("Ingrese el nombre y apellido del chef: ");
         String nombreChef = sc.nextLine();

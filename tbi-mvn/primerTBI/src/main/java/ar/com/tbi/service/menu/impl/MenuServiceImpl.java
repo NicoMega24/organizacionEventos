@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.util.UUID;
 
 import ar.com.tbi.bd.BdEventoGastronomico;
+import ar.com.tbi.domain.Chef;
 import ar.com.tbi.domain.EventoGastronomico;
 import ar.com.tbi.domain.Participante;
 import ar.com.tbi.service.archivos.ArchivosEventoGastronomicoService;
@@ -36,7 +37,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void mostrarMenu(Scanner scanner) {
-        int opcion;
+        int opcion = 0;
         do {
             System.out.println("----------------------------- MENU ---------------------------------");
             System.out.println("Ingrese opción: ");
@@ -50,8 +51,15 @@ public class MenuServiceImpl implements MenuService {
             System.out.println("8. Salir");
             System.out.println("---------------------------------------------------------------------");
 
-            opcion = scanner.nextInt();
-            scanner.nextLine();
+            if(scanner.hasNextInt()) {
+                opcion = scanner.nextInt();
+                scanner.nextLine();
+            }else{
+                System.out.println("Ingrese una opcion valida");
+                scanner.nextLine();
+                continue;
+            }
+        
             switch (opcion) {
                 case 1 -> eventoService.crearEventoGastronomico();
                 case 2 -> participanteService.inscribirParticipante();
@@ -66,22 +74,36 @@ public class MenuServiceImpl implements MenuService {
                         System.out.println(e.getMessage());
                     }
                 }
-                case 4 -> chefService.crearChef();
+                case 4 -> {
+                    Chef chef = chefService.crearChef();
+                    System.out.println("Ingrese el ID del evento gastronómico para asignar el chef: ");
+                    UUID idEvento = UUID.fromString(scanner.next());
+                    EventoGastronomico evento = eventoService.buscarEventoPorId(idEvento);
+
+                    if(evento != null && evento.getChefAcargo() == null) {
+                        evento.setChefAcargo(chef);
+                        System.out.println("Chef asignado al evento con éxito");
+                    }else{
+                        System.out.println("Evento no encontrado o ya tiene un chef asignado");
+                    }
+                }
+                    
                 case 5 -> {
-                    System.out.print("Ingrese el ID del evento gastronómico: ");
-                    String idEventoString = scanner.nextLine();
-                    UUID idEvento1 = UUID.fromString(idEventoString);
-                    
-                    System.out.print("Ingrese el DNI del participante: ");
-                    Long dniNuevo = scanner.nextLong();
-                    
-                    Participante participante = participanteService.buscarParticipantePorDni(dniNuevo);
-                    EventoGastronomico evento = eventoService.buscarEventoPorId(idEvento1);
-                    
-                    if (participante != null && evento != null) {
-                        resenaService.dejarResena(participante, evento);
-                    } else {
-                        System.out.println("Participante o evento no encontrado");
+                    try {
+                        System.out.print("Ingrese el ID del evento gastronómico: ");
+                        String idEventoString = scanner.next();
+                        UUID idEvento = UUID.fromString(idEventoString);
+                        System.out.print("Ingrese el DNI del participante: ");
+                        Long dniNuevo = scanner.nextLong();
+                        Participante participante = participanteService.buscarParticipantePorDni(dniNuevo);
+                        EventoGastronomico evento = eventoService.buscarEventoPorId(idEvento);
+                        if (participante != null && evento != null) {
+                            resenaService.dejarResena(evento, participante);
+                        } else {
+                            System.out.println("Participante o evento no encontrado");
+                        }
+                    } catch (NoSuchElementException e) {
+                        System.out.println("Error: " + e.getMessage());
                     }
                 }
                 case 6 -> {

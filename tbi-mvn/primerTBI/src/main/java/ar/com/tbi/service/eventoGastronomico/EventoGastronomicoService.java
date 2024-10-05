@@ -22,4 +22,5 @@ public interface EventoGastronomicoService {
     EventoGastronomico buscarEventoPorId(UUID idEvento);
 
     List<EventoGastronomico> getEventoGastronomico();
+
 }

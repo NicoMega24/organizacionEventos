@@ -1,18 +1,19 @@
 package ar.com.tbi.service.participante.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-import ar.com.tbi.domain.EventoGastronomico;
 import ar.com.tbi.domain.Participante;
 import ar.com.tbi.enumeration.InteresEnum;
 import ar.com.tbi.service.eventoGastronomico.EventoGastronomicoService;
 import ar.com.tbi.service.participante.ParticipanteService;
 
 public class ParticipanteServiceImpl implements ParticipanteService {
-    private final EventoGastronomicoService eventoGastronomicoService;
+
+    private final List<Participante> participantes = new ArrayList<>();
 
     public ParticipanteServiceImpl(EventoGastronomicoService eventoGastronomicoService) {
-        this.eventoGastronomicoService = eventoGastronomicoService;
     }
 
     @Override
@@ -22,9 +23,8 @@ public class ParticipanteServiceImpl implements ParticipanteService {
         System.out.println("Ingrese el dni del participante: ");
         Long dni = sc.nextLong();
         participanteNuevo.setDni(dni);
-        sc.nextLine();
         System.out.println("Ingrese el nombre y apellido del participante: ");
-        String nombreApellidoParticipante = sc.next();
+        String nombreApellidoParticipante = sc.nextLine();
         participanteNuevo.setNombreApellido(nombreApellidoParticipante);
         sc.nextLine();
         System.out.println("Ingrese el interes culinario: ");
@@ -42,19 +42,16 @@ public class ParticipanteServiceImpl implements ParticipanteService {
             case 5 -> InteresEnum.ASADO;
             default -> null;
         });
-        
+        participantes.add(participanteNuevo);
         System.out.println("Participante registrado");
         return participanteNuevo;
     }
 
-    
     @Override
     public Participante buscarParticipantePorDni(Long dni) {
-        for (EventoGastronomico evento : eventoGastronomicoService.getEventoGastronomico()) {
-            for (Participante participante : evento.getParticipantes().values()) {
-                if (participante.getDni().equals(dni)) {
-                    return participante;
-                }
+        for (Participante participante : participantes) {
+            if (participante.getDni().equals(dni)) {
+                return participante;
             }
         }
         return null;
